@@ -1,0 +1,7 @@
+/.idea/
+/.pytest_cache/
+/dist/
+/*.egg-info/
+*.pyc
+/.coverage
+/coverage.xml
