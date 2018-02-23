@@ -56,7 +56,7 @@ def add_to_parser(parser, usage):
     for descriptor in descriptors:
         try:
             options, *info = descriptor.split('\n')
-            info = ' '.join(info).replace('    ', '')
+            info = ' '.join(i for i in info if i).replace('    ', '')
             if options.count(' ') == 1:
                 if options[0] == '-':
                     short, long = options.split(' ')
