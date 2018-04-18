@@ -68,7 +68,7 @@ def add_to_parser(parser, usage):
                     parser.add_argument(short, type=types[typ], help=info)
             else:
                 short, long, typ, default = options.split(' ')
-                info += '. Default: ' + default
+                info = info.rstrip() + '. Default: ' + default
                 default = '' if default == '-' else default
                 parser.add_argument(short, long, type=types[typ], default=default, help=info)
         except Exception as e:
