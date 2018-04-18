@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='prettyparse',
-    version='0.1.2',
+    version='0.1.3',
     packages=find_packages(),
     author='Matthew Scholefield',
     author_email='matthew331199@gmail.com',
