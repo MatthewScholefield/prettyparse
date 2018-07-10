@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentError
 
 types = {
     'str': str,
@@ -33,7 +33,7 @@ def create_parser(usage):
     return parser
 
 
-def add_to_parser(parser, usage):
+def add_to_parser(parser, usage, ignore_existing=False):
     """
     Add arguments described in the usage string to the
     parser. View more details at the <create_parser> docs
@@ -41,6 +41,7 @@ def add_to_parser(parser, usage):
     Args:
         parser (ArgumentParser): parser to add arguments to
         usage (str): Usage string in the format described above
+        ignore_existing (bool): Ignore any arguments that have already been defined
     """
     usage = '\n' + usage
     first_line = [i for i in usage.split('\n') if i][0]
@@ -51,7 +52,7 @@ def add_to_parser(parser, usage):
     defaults = {}
     description, *descriptors = usage.split('\n:')
     description = description.replace('\n', ' ').strip()
-    if description:
+    if description and (not parser.description or not ignore_existing):
         parser.description = description
     for descriptor in descriptors:
         try:
@@ -71,6 +72,9 @@ def add_to_parser(parser, usage):
                 info = info.rstrip() + '. Default: ' + default
                 default = '' if default == '-' else default
                 parser.add_argument(short, long, type=types[typ], default=default, help=info)
+        except ArgumentError:
+            if not ignore_existing:
+                raise
         except Exception as e:
             print(e.__class__.__name__ + ': ' + str(e))
             print('While parsing:')

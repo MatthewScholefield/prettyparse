@@ -3,7 +3,7 @@ import sys
 sys.path += ['.']  # noqa
 
 import pytest
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentError
 from prettyparse import create_parser, add_to_parser
 
 
@@ -102,3 +102,21 @@ class TestParser:
 
         with pytest.raises(ValueError):
             create_parser(':too int many args')
+
+    def test_overlap(self):
+        parser = create_parser('''
+            description
+            :-a --alpha
+            :-b --beta
+        ''')
+        with pytest.raises(ArgumentError):
+            create_parser('''
+                description
+                :-a --alpha
+                :-a --alpha
+            ''')
+        with pytest.raises(ArgumentError):
+            add_to_parser(parser, ':-a --alpha')
+        add_to_parser(parser, 'new_desc\n:-a --alpha', True)
+        assert parser.description == 'description'
+        add_to_parser(parser, ':-g --gamma')
