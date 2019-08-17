@@ -1,5 +1,7 @@
 import sys
 
+from prettyparse.prettyparse import Usage
+
 sys.path += ['.']  # noqa
 
 import pytest
@@ -66,12 +68,19 @@ class TestParser:
         :alpha int
             <alpha help line 1>
             <alpha help line 2>
-        :-b --beta str alpha_default
+        :-b --beta str beta_default
             <beta desc>
         :-g --gamma
             <gamma desc>
         '''
-        create_parser(usage)
+        usage = Usage(usage)
+        assert len(usage.arguments) == 3
+        assert usage.desc == '<description line 1> <description line 2>'
+        assert usage.arguments == {
+            'alpha': dict(_0='alpha', type=int, help='<alpha help line 1> <alpha help line 2>'),
+            'beta': dict(_0='-b', _1='--beta', type=str, help='<beta desc>. Default: beta_default', default='beta_default'),
+            'gamma': dict(_0='-g', _1='--gamma', help='<gamma desc>', action='store_true')
+        }
 
     def test_add_to_parser(self):
         parser = ArgumentParser(description='desc')
@@ -109,14 +118,42 @@ class TestParser:
             :-a --alpha
             :-b --beta
         ''')
-        with pytest.raises(ArgumentError):
-            create_parser('''
+        usage = Usage('''
                 description
                 :-a --alpha
+                    desc 1
                 :-a --alpha
+                    desc 2
             ''')
+        assert len(usage.arguments) == 1
+        assert usage.arguments['alpha']['help'] == 'desc 2'
         with pytest.raises(ArgumentError):
             add_to_parser(parser, ':-a --alpha')
         add_to_parser(parser, 'new_desc\n:-a --alpha', True)
         assert parser.description == 'description'
         add_to_parser(parser, ':-g --gamma')
+
+    def test_fuzzy_indent(self):
+        Usage('''
+          description
+              :-a --alpha
+            this is alpha
+                description
+            :-b --beta
+        ''')
+
+    def test_or(self):
+        usage = Usage('''
+            desc 1
+            :-a --alpha
+                alpha 1
+            :-b --beta
+        ''') | Usage('''
+            desc 2
+            :-a --alpha
+                alpha 2
+            :-g --gamma
+        ''')
+        assert set(usage.arguments) == {'alpha', 'beta', 'gamma'}
+        assert usage.desc == 'desc 1'
+        assert usage.arguments['alpha']['help'] == 'alpha 1'
