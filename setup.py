@@ -1,9 +1,9 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='prettyparse',
     version='0.1.4',
-    packages=find_packages(),
+    packages=['prettyparse'],
     author='Matthew Scholefield',
     author_email='matthew331199@gmail.com',
     description='A clean, simple way to create Python argument parsers',
