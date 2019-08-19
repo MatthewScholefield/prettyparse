@@ -1,4 +1,4 @@
-# Prettyparse
+from os.path import join# Prettyparse
 
 [![PyPI version](https://img.shields.io/pypi/v/prettyparse.svg)](https://pypi.org/project/prettyparse/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cc0574a2e4c64f60bece2a6b1caa2b0f)](https://www.codacy.com/app/MatthewScholefield/prettyparse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MatthewScholefield/prettyparse&amp;utm_campaign=Badge_Grade)
@@ -21,7 +21,7 @@ script.py:
 
 ```Python
 #!/usr/bin/env python3
-from prettyparse import create_parser
+from prettyparse import parse_args
 
 usage = '''
     My program description
@@ -41,7 +41,7 @@ usage = '''
         set to False by default
 '''
 
-args = create_parser(usage).parse_args()
+args = parse_args(usage)
 print('First:', args.first_arg)
 print('Alpha:', args.alpha)
 print('Number:', args.number)
@@ -66,7 +66,8 @@ like you normally would.
 ### Example
 
 ```Python
-from prettyparse import create_parser
+from argparse import ArgumentParser
+from prettyparse import Usage
 
 usage = '''
     My program
@@ -78,10 +79,61 @@ usage = '''
     ...
 '''
 
-parser = create_parser(usage)
+parser = ArgumentParser()
 parser.add_argument('-v', '--version', action='version', version='0.1.0')
+Usage(usage).apply(parser)
 args = parser.parse_args()
 
 ```
 The `...` is ignored by prettyparse and can optionally be used to indicate
 there are more options than those listed in the usage string.
+
+## Argument Merging
+
+Suppose that you have two similar scripts. You can share a set of base arguments
+as follows:
+
+```python
+from prettyparse import Usage
+decoder_usage = Usage('''
+    A script to decode foo data
+    
+    :foo_file str
+        Input .foo file to decode
+    :-q --quiet
+        Don't output progress
+''')
+reencoder_usage = Usage('''
+    A script to re-encode foo data
+    
+    :foo_file str
+    :output_file str
+        Ourput .foo file to write re-encoded data
+    :-r --reencode-level float 0.1
+        Level to reencode foo at
+''')
+args = reencoder_usage.parse()
+print(args.quiet, args.foo_file, args.output_file, args.reencode_level)
+```
+
+## Argument Renderers
+
+Suppose you had an argument that you wanted to modify after it's been parsed.
+You can do this like so:
+
+```python
+from prettyparse import Usage
+from os.path import join
+
+usage = Usage('''
+    My program
+    
+    :root str
+        Filename of root path
+    :-s --src-subfolder
+        Subfolder with source data
+''', src_folder=lambda args: join(args.root, args.src_subfolder))
+
+args = usage.parse()
+print('Full path of source:', args.src_folder)
+```

@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='prettyparse',
     version='0.2.0',
-    packages=['prettyparse'],
+    py_modules=['prettyparse'],
     author='Matthew Scholefield',
     author_email='matthew331199@gmail.com',
     description='A clean, simple way to create Python argument parsers',
