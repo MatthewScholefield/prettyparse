@@ -111,7 +111,7 @@ reencoder_usage = Usage('''
         Ourput .foo file to write re-encoded data
     :-r --reencode-level float 0.1
         Level to reencode foo at
-''')
+''') | decoder_usage
 args = reencoder_usage.parse()
 print(args.quiet, args.foo_file, args.output_file, args.reencode_level)
 ```
