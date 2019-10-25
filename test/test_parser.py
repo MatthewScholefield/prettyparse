@@ -133,6 +133,27 @@ class TestParser:
             :-b --beta
         ''')
 
+    def test_customizer(self):
+        def modify_usage(parser):
+            parser.usage = (parser.usage or '') + 'hello'
+
+        parser = ArgumentParser()
+        assert parser.usage is None
+        usage = Usage()
+        usage.add_customizer(modify_usage)
+        usage.apply(parser)
+        assert parser.usage == 'hello'
+
+        def modify_usage_2(parser):
+            parser.usage = (parser.usage or '') + ' hi'
+
+        usage_2 = Usage()
+        usage_2.add_customizer(modify_usage_2)
+        usage |= usage_2
+        parser = ArgumentParser()
+        usage.apply(parser)
+        assert parser.usage == 'hello hi'
+
     def test_or(self):
         usage = Usage('''
             desc 1

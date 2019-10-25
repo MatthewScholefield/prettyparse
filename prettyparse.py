@@ -49,6 +49,7 @@ class Usage(object):
         self.desc = ''
         self.arguments = OrderedDict()
         self.renderers = renderers
+        self.customizers = []
         self.ingest(usage_string)
 
     def add_argument(self, _0, _1=None, **kwargs):
@@ -58,6 +59,14 @@ class Usage(object):
             arg['_1'] = _1
         key = arg.get('_1', arg['_0']).replace('-', '_').strip('_')
         self.arguments[key] = arg
+
+    def add_customizer(self, customizer):
+        """
+        Adds a function that receives the parser for modification
+        Args:
+            customizer (Callable): Function that receives an ArgumentParser
+        """
+        self.customizers.append(customizer)
 
     def ingest(self, usage_string):
         """
@@ -123,6 +132,8 @@ class Usage(object):
             argument = dict(argument)
             positional = [argument.pop(k) for k in sorted(argument) if k.startswith('_')]
             parser.add_argument(*positional, **argument)
+        for i in self.customizers:
+            i(parser)
 
     def render_args(self, args):
         args = deepcopy(args)
@@ -160,4 +171,6 @@ class Usage(object):
                 usage.arguments[k] = self._merge_args(other.arguments.get(k, {}), self.arguments.get(k, {}))
         usage.renderers.update(other.renderers)
         usage.renderers.update(self.renderers)
+        usage.customizers.extend(self.customizers)
+        usage.customizers.extend(other.customizers)
         return usage

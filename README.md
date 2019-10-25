@@ -137,3 +137,22 @@ usage = Usage('''
 args = usage.parse()
 print('Full path of source:', args.src_folder)
 ```
+
+## Customizers
+
+Suppose you wanted to do something very specific with the parser object
+like modify the usage string. You could do this by adding a customizer which
+is a function that receives and modifies the parser object. This happens after
+arguments have been added but before any arguments are parsed:
+
+```python
+from prettyparse import Usage
+
+def custom_usage(parser):
+    """Adds '< input_data.txt' to a parser usage string"""
+    parser.usage = parser.format_usage().strip().replace('usage: ', '') + ' < input_data.txt'
+
+usage = Usage('My program that reads from stdin')
+usage.add_customizer(custom_usage)
+args = usage.parse()
+```
