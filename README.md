@@ -1,4 +1,4 @@
-from os.path import join# Prettyparse
+# Prettyparse
 
 [![PyPI version](https://img.shields.io/pypi/v/prettyparse.svg)](https://pypi.org/project/prettyparse/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cc0574a2e4c64f60bece2a6b1caa2b0f)](https://www.codacy.com/app/MatthewScholefield/prettyparse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MatthewScholefield/prettyparse&amp;utm_campaign=Badge_Grade)
