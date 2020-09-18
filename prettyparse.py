@@ -149,6 +149,14 @@ class Usage(object):
         self.apply(parser)
         return self.render_args(parser.parse_args(args))
 
+    def error(self, message: str):
+        """
+        Indicate an argument error with the given message
+        """
+        parser = ArgumentParser()
+        self.apply(parser)
+        parser.error(message)
+
     @staticmethod
     def _merge_args(a, b):
         merged = dict(b or a)
