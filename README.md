@@ -1,7 +1,7 @@
 # Prettyparse
 
 [![PyPI version](https://img.shields.io/pypi/v/prettyparse.svg)](https://pypi.org/project/prettyparse/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cc0574a2e4c64f60bece2a6b1caa2b0f)](https://www.codacy.com/app/MatthewScholefield/prettyparse?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MatthewScholefield/prettyparse&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7c55788b52484bbda60cee074a03788f)](https://www.codacy.com/gh/MatthewScholefield/prettyparse/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MatthewScholefield/prettyparse&amp;utm_campaign=Badge_Grade)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/matthewscholefield/prettyparse.svg)](https://github.com/MatthewScholefield/prettyparse/archive/master.zip)
 [![License](https://img.shields.io/github/license/matthewscholefield/prettyparse.svg)](https://github.com/MatthewScholefield/prettyparse/blob/master/LICENSE)
 
